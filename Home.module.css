@@ -1,0 +1,10 @@
+.container { font-family: sans-serif; padding: 1rem; background: #fff0f0; color: #111; }
+.logo { width: 140px; display: block; margin: 1rem auto; }
+.title { text-align: center; color: #b00020; }
+.products { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
+.product { background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 5px #aaa; }
+.product img { width: 150px; display: block; margin-bottom: 0.5rem; }
+.cart { text-align: center; margin: 2rem 0; }
+.form { display: flex; flex-direction: column; max-width: 400px; margin: 2rem auto; gap: 1rem; }
+input, textarea { padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
+button { background: #d00030; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; }
