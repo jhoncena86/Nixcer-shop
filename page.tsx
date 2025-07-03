@@ -1,37 +1,48 @@
 'use client';
-import { useState } from 'react';
-import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-const products = [
-  { id: 1, name: 'Red Lipstick', price: 799, image: '/products/lipstick-red-1.jpg' },
-  { id: 2, name: 'Face Cream', price: 1199, image: '/products/cream-1.jpg' }
-];
-
-export default function ProductsPage() {
+export default function CheckoutPage() {
+  const searchParams = useSearchParams();
   const [cart, setCart] = useState([]);
+  const [formData, setFormData] = useState({ name: '', email: '', address: '' });
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
+  useEffect(() => {
+    const cartData = searchParams.get('cart');
+    if (cartData) setCart(JSON.parse(cartData));
+  }, [searchParams]);
+
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value});
+  };
+
+  const sendEmail = async () => {
+    await fetch('/api/sendEmail', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({...formData, cart})
+    });
+    alert('Order placed and email sent!');
+  };
+
+  const whatsappUrl = () => {
+    const items = cart.map(p => `${p.name} (Rs.${p.price})`).join(', ');
+    const msg = `Order from ${formData.name}, Email: ${formData.email}, Address: ${formData.address}, Items: ${items}`;
+    return `https://wa.me/923001234567?text=${encodeURIComponent(msg)}`;
   };
 
   return (
-    <main className="p-8">
-      <h2 className="text-2xl font-bold mb-4">Products</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {products.map(product => (
-          <div key={product.id} className="border rounded-xl shadow p-4">
-            <img src={product.image} className="h-48 w-full object-cover rounded mb-2" />
-            <h3 className="text-lg font-semibold">{product.name}</h3>
-            <p className="text-sm">Rs. {product.price}</p>
-            <button onClick={() => addToCart(product)} className="bg-red-600 text-white mt-2 px-4 py-1 rounded">Add to Cart</button>
-          </div>
-        ))}
-      </div>
-      <div className="mt-6">
-        <Link href={{ pathname: '/checkout', query: { cart: JSON.stringify(cart) } }} className="bg-green-600 text-white px-4 py-2 rounded">
-          Go to Checkout ({cart.length} items)
-        </Link>
-      </div>
+    <main className="p-8 max-w-lg mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Checkout</h2>
+      <form onSubmit={(e) => { e.preventDefault(); sendEmail(); }} className="flex flex-col gap-4">
+        <input required name="name" onChange={handleChange} className="border p-2 rounded" placeholder="Name" />
+        <input required name="email" onChange={handleChange} className="border p-2 rounded" placeholder="Email" />
+        <textarea required name="address" onChange={handleChange} className="border p-2 rounded" placeholder="Address" />
+        <button type="submit" className="bg-red-600 text-white py-2 rounded">Place Order (COD)</button>
+      </form>
+      <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="block mt-4 text-center bg-green-600 text-white py-2 rounded">
+        Checkout via WhatsApp
+      </a>
     </main>
   );
 }
