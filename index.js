@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
 
@@ -10,6 +11,7 @@ export default function Home() {
   ];
 
   const addToCart = (product) => setCart([...cart, product]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await fetch('/api/sendEmail', {
@@ -20,6 +22,7 @@ export default function Home() {
     const data = await res.json();
     alert(data.success ? "Email sent!" : "Failed to send");
   };
+
   const whatsappCheckout = () => {
     const summary = cart.map(p => p.name).join(', ');
     const msg = encodeURIComponent(`Hi! I want to buy: ${summary}`);
@@ -28,31 +31,24 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <img src="/Nixcer-logo.jpg" className={styles.logo} alt="Nixcer Logo" />
-      <h1 className={styles.title}>Nixcer Cosmetics</h1>
-
-      <div className={styles.products}>
-        {products.map(p => (
-          <div key={p.id} className={styles.product}>
-            <img src={p.image1} alt="" />
-            <img src={p.image2} alt="" />
-            <h2>{p.name}</h2>
-            <button onClick={() => addToCart(p)}>Add to Cart</button>
+      <h1>Welcome to Nixcer</h1>
+      {products.map(p => (
+        <div key={p.id} className={styles.product}>
+          <h3>{p.name}</h3>
+          <div className={styles.imageSlider}>
+            <img src={p.image1} alt={p.name} />
+            <img src={p.image2} alt={p.name} />
           </div>
-        ))}
-      </div>
-
-      <div className={styles.cart}>
-        <h3>Cart: {cart.length} item(s)</h3>
-        <button onClick={whatsappCheckout}>Checkout via WhatsApp</button>
-      </div>
-
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <input placeholder="Name" required onChange={e => setForm({ ...form, name: e.target.value })} />
-        <input placeholder="Email" type="email" required onChange={e => setForm({ ...form, email: e.target.value })} />
-        <textarea placeholder="Message" required onChange={e => setForm({ ...form, message: e.target.value })}></textarea>
-        <button type="submit">Send Email</button>
+          <button onClick={() => addToCart(p)}>Add to Cart</button>
+        </div>
+      ))}
+      <form onSubmit={handleSubmit}>
+        <input placeholder="Name" onChange={(e) => setForm({...form, name: e.target.value})} />
+        <input placeholder="Email" onChange={(e) => setForm({...form, email: e.target.value})} />
+        <textarea placeholder="Message" onChange={(e) => setForm({...form, message: e.target.value})}></textarea>
+        <button type="submit">Checkout via Email</button>
       </form>
+      <button onClick={whatsappCheckout}>Checkout via WhatsApp</button>
     </div>
   );
 }
