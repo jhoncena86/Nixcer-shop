@@ -1,0 +1,21 @@
+[
+  {
+    "id": "nixcer-tissue",
+    "name": "Nixcer Ultra Soft Facial Tissue",
+    "price": 10,
+    "images": [
+      "/images/nixcer-tissue/tissue-1.jpg"
+    ],
+    "description": "Premium ultra soft facial tissues (200 x 2 ply), 100% pure pulp. Ideal for personal and professional use."
+  },
+  {
+    "id": "nixcer-towels",
+    "name": "Nixcer Disposable Hair Towels",
+    "price": 12,
+    "images": [
+      "/images/nixcer-towels/towels-1.jpg",
+      "/images/nixcer-towels/towels-2.jpg"
+    ],
+    "description": "Premium disposable towels, made from wood pulp fabric. Suitable for salons, clinics, spas, restaurants and personal use."
+  }
+]
